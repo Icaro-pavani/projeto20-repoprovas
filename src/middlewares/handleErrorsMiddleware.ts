@@ -4,6 +4,7 @@ const serviceErrorToStatusCode = {
   unauthorized: 401,
   conflict: 409,
   unprocessable: 422,
+  notFound: 404,
 };
 
 export function conflictError(message: string) {
@@ -16,6 +17,10 @@ export function unprocessableError(message: string) {
 
 export function unauthorizedError(message: string) {
   return { type: "unauthorized", message: message || "" };
+}
+
+export function notFoundError(message: string) {
+  return { type: "notFound", message: message || "" };
 }
 
 export default async function handleErrors(
