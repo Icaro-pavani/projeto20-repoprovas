@@ -12,3 +12,7 @@ export async function createUser(userData: CreateUserData) {
 export async function findByEmail(email: string) {
   return prisma.user.findFirst({ where: { email } });
 }
+
+export async function findById(id: number) {
+  return prisma.user.findFirst({ where: { id } });
+}

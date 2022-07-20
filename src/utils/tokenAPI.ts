@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const secretKey = process.env.JWT_KEY;
 
-type TokenDecrypt = {
+export type TokenDecrypt = {
   id: number;
 };
 
