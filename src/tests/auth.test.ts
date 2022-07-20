@@ -4,10 +4,21 @@ import { prisma } from "../config/database.js";
 
 const EMAIL = "tt1@tt.cc";
 const PASSWORD = "testtest";
-const userData = { email: EMAIL, password: PASSWORD };
+const PASSWORDCONFIRMATION = "testtest";
+const userData = {
+  email: EMAIL,
+  password: PASSWORD,
+  passwordConfirmation: PASSWORDCONFIRMATION,
+};
 
 describe("USer tests suite", () => {
-  it("given email and password, create user", async () => {
+  it("given email, password and wrong passwrodConfirmation, fail to create user", async () => {
+    const wrongUserData = { ...userData, passwordConfirmation: "test" };
+    const response = await supertest(app).post("/sign-up").send(wrongUserData);
+    expect(response.statusCode).toBe(422);
+  });
+
+  it("given email, password and passwordConfirmation, create user", async () => {
     const response = await supertest(app).post("/sign-up").send(userData);
     expect(response.statusCode).toBe(201);
   });
@@ -18,6 +29,7 @@ describe("USer tests suite", () => {
   });
 
   it("given email and password already registered, login user", async () => {
+    delete userData.passwordConfirmation;
     const response = await supertest(app).post("/sign-in").send(userData);
     console.log(response.body.token);
     const token = response.body.token;

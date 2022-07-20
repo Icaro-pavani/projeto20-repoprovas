@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const secretKey = process.env.JWT_KEY;
-console.log(secretKey);
 
 type TokenDecrypt = {
   id: number;
