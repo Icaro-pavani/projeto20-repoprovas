@@ -41,6 +41,7 @@ model Discipline {
   term                Term                  @relation(fields: [termId], references: [id])
   TeachersDisciplines TeachersDisciplines[]
 
+  @@unique([termId, name], name: "nameTermIdentifier")
   @@map("disciplines")
 }
 
@@ -72,5 +73,6 @@ model TeachersDisciplines {
   disciplineId Int
   Test         Test[]
 
+  @@unique([teacherId, disciplineId], name: "teacherDisciplineIdentifier")
   @@map("teachersDisciplines")
 }

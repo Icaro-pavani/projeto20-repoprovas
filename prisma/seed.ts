@@ -5,8 +5,12 @@ async function main() {
   for (let i = 1; i < 7; i++) {
     terms.push({ number: i });
   }
-  await prisma.term.createMany({
-    data: [...terms],
+  terms.map(async (term) => {
+    await prisma.term.upsert({
+      where: { number: term.number },
+      update: {},
+      create: term,
+    });
   });
 
   const categories = [
@@ -14,13 +18,21 @@ async function main() {
     { name: "Prática" },
     { name: "Recuperação" },
   ];
-  await prisma.category.createMany({
-    data: categories,
+  categories.map(async (category) => {
+    await prisma.category.upsert({
+      where: { name: category.name },
+      update: {},
+      create: category,
+    });
   });
 
   const teachers = [{ name: "Diego Pinho" }, { name: "Bruna Hamori" }];
-  await prisma.teacher.createMany({
-    data: teachers,
+  teachers.map(async (teacher) => {
+    await prisma.teacher.upsert({
+      where: { name: teacher.name },
+      update: {},
+      create: teacher,
+    });
   });
 
   const disciplines = [
@@ -32,8 +44,15 @@ async function main() {
     { name: "Autoconfiança", term: 1 },
   ];
   for (let i = 0; i < disciplines.length; i++) {
-    await prisma.discipline.create({
-      data: {
+    await prisma.discipline.upsert({
+      where: {
+        nameTermIdentifier: {
+          name: disciplines[i].name,
+          termId: disciplines[i].term,
+        },
+      },
+      update: {},
+      create: {
         name: disciplines[i].name,
         termId: disciplines[i].term,
       },
@@ -49,8 +68,15 @@ async function main() {
     { teacherId: 2, disciplieId: 6 },
   ];
   for (let i = 0; i < teachersDisplines.length; i++) {
-    await prisma.teachersDisciplines.create({
-      data: {
+    await prisma.teachersDisciplines.upsert({
+      where: {
+        teacherDisciplineIdentifier: {
+          teacherId: teachersDisplines[i].teacherId,
+          disciplineId: teachersDisplines[i].disciplieId,
+        },
+      },
+      update: {},
+      create: {
         teacherId: teachersDisplines[i].teacherId,
         disciplineId: teachersDisplines[i].disciplieId,
       },
