@@ -11,19 +11,24 @@ export async function findTests() {
           TeachersDisciplines: {
             select: {
               Test: {
+                orderBy: { category: { name: "asc" } },
                 select: {
-                  name: true,
-                  pdfUrl: true,
                   category: {
                     select: {
                       name: true,
+                      Test: {
+                        select: {
+                          name: true,
+                          pdfUrl: true,
+                          teacherDispline: {
+                            select: {
+                              teacher: true,
+                            },
+                          },
+                        },
+                      },
                     },
                   },
-                },
-              },
-              teacher: {
-                select: {
-                  name: true,
                 },
               },
             },
