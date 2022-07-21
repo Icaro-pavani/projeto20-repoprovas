@@ -8,3 +8,9 @@ export async function createTest(req: Request, res: Response) {
 
   res.sendStatus(201);
 }
+
+export async function getTestSortedByDisciplines(req: Request, res: Response) {
+  const tests = await testService.obtainTestsByTerms();
+
+  res.status(200).send(tests);
+}
