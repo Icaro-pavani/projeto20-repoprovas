@@ -38,3 +38,7 @@ async function findTeacherDisciplineId(
 
   return teacherDiscipline.id;
 }
+
+export async function findAll() {
+  return prisma.test.findMany({});
+}

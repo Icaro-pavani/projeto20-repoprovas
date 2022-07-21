@@ -18,5 +18,13 @@ export async function addNewTest(testInfo: CreateTestData) {
 }
 
 export async function obtainTestsByTerms() {
-  return await termRepository.findTests();
+  return await termRepository.findTestsOrderByTerm();
+}
+
+export async function obtainTestsByTeachers() {
+  return await teacherRepository.findTestsOrderByTeacher();
+}
+
+export async function getAllTests() {
+  return await testRepository.findAll();
 }
