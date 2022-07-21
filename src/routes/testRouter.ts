@@ -9,7 +9,7 @@ import testSchema from "../schemas/testSchema.js";
 
 const testRouter = Router();
 
-testRouter.post("/test", validToken, validSchema(testSchema), createTest);
-testRouter.get("/test/discipline", validToken, getTestSortedByDisciplines);
+testRouter.post("/tests", validToken, validSchema(testSchema), createTest);
+testRouter.get("/tests", validToken, getTestSortedByDisciplines);
 
 export default testRouter;

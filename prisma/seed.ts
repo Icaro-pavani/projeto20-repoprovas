@@ -68,7 +68,7 @@ async function main() {
     { teacherId: 2, disciplieId: 6 },
   ];
   for (let i = 0; i < teachersDisplines.length; i++) {
-    await prisma.teachersDisciplines.upsert({
+    await prisma.teacherDisciplines.upsert({
       where: {
         teacherDisciplineIdentifier: {
           teacherId: teachersDisplines[i].teacherId,

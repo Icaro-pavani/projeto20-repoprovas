@@ -1,8 +1,8 @@
-import { TeachersDisciplines, Test } from "@prisma/client";
+import { TeacherDisciplines, Test } from "@prisma/client";
 import Joi from "joi";
 
 export type CreateTestData = Omit<Test, "id" | "teacherDisciplineId"> &
-  Omit<TeachersDisciplines, "id">;
+  Omit<TeacherDisciplines, "id">;
 
 const testSchema = Joi.object<CreateTestData>({
   name: Joi.string().required(),

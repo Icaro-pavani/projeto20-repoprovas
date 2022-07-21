@@ -23,7 +23,7 @@ async function findTeacherDisciplineId(
   disciplineId: number,
   teacherId: number
 ) {
-  const teacherDiscipline = await prisma.teachersDisciplines.findFirst({
+  const teacherDiscipline = await prisma.teacherDisciplines.findFirst({
     where: {
       teacherId,
       disciplineId,
