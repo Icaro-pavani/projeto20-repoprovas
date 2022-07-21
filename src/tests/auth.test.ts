@@ -1,34 +1,40 @@
 import supertest from "supertest";
+
 import app from "../app.js";
 import { prisma } from "../config/database.js";
+import userFactory from "./factories/userFactory.js";
 
-const EMAIL = "tt1@tt.cc";
-const PASSWORD = "testtest";
-const PASSWORDCONFIRMATION = "testtest";
-const userData = {
-  email: EMAIL,
-  password: PASSWORD,
-  passwordConfirmation: PASSWORDCONFIRMATION,
-};
+beforeEach(async () => {
+  await prisma.$executeRaw`TRUNCATE TABLE users`;
+});
 
-describe("USer tests suite", () => {
+describe("User tests suite", () => {
   it("given email, password and wrong passwrodConfirmation, fail to create user", async () => {
-    const wrongUserData = { ...userData, passwordConfirmation: "test" };
-    const response = await supertest(app).post("/sign-up").send(wrongUserData);
+    const userData = userFactory.createSignUp();
+    userData.passwordConfirmation = "test";
+    const response = await supertest(app).post("/sign-up").send(userData);
     expect(response.statusCode).toBe(422);
   });
 
   it("given email, password and passwordConfirmation, create user", async () => {
+    const userData = userFactory.createSignUp();
     const response = await supertest(app).post("/sign-up").send(userData);
     expect(response.statusCode).toBe(201);
   });
 
   it("given email and password already registered, fail to create user", async () => {
-    const response = await supertest(app).post("/sign-up").send(userData);
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
+    const userSameEmailData = userFactory.createSignUp();
+    const response = await supertest(app)
+      .post("/sign-up")
+      .send(userSameEmailData);
     expect(response.statusCode).toBe(409);
   });
 
   it("given email and password already registered, login user", async () => {
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
     delete userData.passwordConfirmation;
     const response = await supertest(app).post("/sign-in").send(userData);
     console.log(response.body.token);
@@ -38,14 +44,22 @@ describe("USer tests suite", () => {
   });
 
   it("given email not registered and password, fail to login", async () => {
-    const wrongUserData = { ...userData, email: "tttt@tt.cc" };
-    const response = await supertest(app).post("/sign-in").send(wrongUserData);
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
+    const unregisteredUserData = userFactory.createSignUp("ttt@test.cc");
+    delete unregisteredUserData.passwordConfirmation;
+    const response = await supertest(app)
+      .post("/sign-in")
+      .send(unregisteredUserData);
     const token: string = response.body.token;
     expect(response.statusCode).toBe(404);
     expect(token).toBeUndefined();
   });
 
   it("given registered email and wrong password, fail to login", async () => {
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
+    delete userData.passwordConfirmation;
     const wrongUserData = { ...userData, password: "tttt@tt.cc" };
     const response = await supertest(app).post("/sign-in").send(wrongUserData);
     const token = response.body.token;
@@ -55,5 +69,5 @@ describe("USer tests suite", () => {
 });
 
 afterAll(async () => {
-  await prisma.user.delete({ where: { email: EMAIL } });
+  await prisma.$disconnect();
 });
