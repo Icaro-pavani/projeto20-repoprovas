@@ -21,7 +21,7 @@ export async function findTestsOrderByTeacher() {
 export async function findByDiscipline(disciplineId: number) {
   return prisma.teacherDisciplines.findMany({
     where: { disciplineId },
-    include: {
+    select: {
       teacher: true,
     },
   });

@@ -9,6 +9,14 @@ interface UserData {
   password: string;
 }
 
+interface TestData {
+  name: string;
+  pdfUrl: string;
+  categoryId: number;
+  disciplineId: number;
+  teacherId: number;
+}
+
 function getConfig(token: string) {
   return {
     headers: {
@@ -23,6 +31,11 @@ async function signUp(signUpData: UserData) {
 
 async function signIn(signInData: UserData) {
   return baseAPI.post<{ token: string }>("/sign-in", signInData);
+}
+
+async function postTest(postTestData: TestData, token: string) {
+  const config = getConfig(token);
+  await baseAPI.post("/tests", postTestData, config);
 }
 
 export interface Term {
@@ -92,12 +105,28 @@ async function getCategories(token: string) {
   return baseAPI.get<{ categories: Category[] }>("/categories", config);
 }
 
+async function getDisciplines(token: string) {
+  const config = getConfig(token);
+  return baseAPI.get<{ disciplines: Discipline[] }>("/disciplines", config);
+}
+
+async function getTeachersByDiscipline(token: string, disciplineId: number) {
+  const config = getConfig(token);
+  return baseAPI.get<{ teachers: { teacher: Teacher }[] }>(
+    `/teachers/${disciplineId}`,
+    config
+  );
+}
+
 const api = {
   signUp,
   signIn,
+  postTest,
   getTestsByDiscipline,
   getTestsByTeacher,
   getCategories,
+  getDisciplines,
+  getTeachersByDiscipline,
 };
 
 export default api;

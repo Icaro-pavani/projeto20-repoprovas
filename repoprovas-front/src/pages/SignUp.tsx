@@ -7,12 +7,13 @@ import {
   Typography,
 } from "@mui/material";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Form from "../components/Form";
 import PasswordInput from "../components/PasswordInput";
 import useAlert from "../hooks/useAlert";
+import useAuth from "../hooks/useAuth";
 import api from "../services/api";
 
 const styles = {
@@ -53,6 +54,13 @@ function SignUp() {
     password: "",
     passwordConfirmation: "",
   });
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (!!token) {
+      navigate("/app/disciplinas");
+    }
+  }, [token, navigate]);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
