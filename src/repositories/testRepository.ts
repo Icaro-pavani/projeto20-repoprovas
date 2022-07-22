@@ -40,5 +40,19 @@ async function findTeacherDisciplineId(
 }
 
 export async function findAll() {
-  return prisma.test.findMany({});
+  return prisma.test.findMany({
+    include: {
+      category: {},
+      teacherDispline: {
+        include: {
+          discipline: {
+            include: {
+              term: {},
+            },
+          },
+          teacher: {},
+        },
+      },
+    },
+  });
 }

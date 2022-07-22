@@ -12,7 +12,7 @@ export async function addNewTest(testInfo: CreateTestData) {
   const discipline = await disciplineRepository.findById(disciplineId);
   const teacher = await teacherRepository.findById(teacherId);
   if (!category || !discipline || !teacher) {
-    throw unprocessableError("There is no category with this Id!");
+    throw unprocessableError("Wrong category, discipline or teacher Id!");
   }
   await testRepository.insert(testInfo);
 }
