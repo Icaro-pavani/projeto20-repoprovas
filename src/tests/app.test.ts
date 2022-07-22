@@ -196,6 +196,45 @@ describe("Single routes tests", () => {
       .set("Authorization", `Bearer ${token}`);
     expect(response.body.categories).toHaveLength(3);
   });
+
+  it("get disciplines", async () => {
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
+    delete userData.passwordConfirmation;
+    let response = await agent.post("/sign-in").send(userData);
+    const token = response.body.token;
+
+    response = await agent
+      .get("/disciplines")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.disciplines).toHaveLength(6);
+  });
+
+  it("get teachers by disciplines", async () => {
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
+    delete userData.passwordConfirmation;
+    let response = await agent.post("/sign-in").send(userData);
+    const token = response.body.token;
+
+    response = await agent
+      .get("/teachers/1")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.body.teachers).toHaveLength(1);
+  });
+
+  it("get teachers by disciplines with id as a letter, fails", async () => {
+    const userData = userFactory.createSignUp();
+    await userFactory.createUser(userData);
+    delete userData.passwordConfirmation;
+    let response = await agent.post("/sign-in").send(userData);
+    const token = response.body.token;
+
+    response = await agent
+      .get("/teachers/a")
+      .set("Authorization", `Bearer ${token}`);
+    expect(response.status).toBe(422);
+  });
 });
 
 afterAll(async () => {
