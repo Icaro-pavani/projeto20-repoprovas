@@ -17,6 +17,10 @@ interface TestData {
   teacherId: number;
 }
 
+interface Code {
+  code: string;
+}
+
 function getConfig(token: string) {
   return {
     headers: {
@@ -36,6 +40,10 @@ async function signIn(signInData: UserData) {
 async function postTest(postTestData: TestData, token: string) {
   const config = getConfig(token);
   await baseAPI.post("/tests", postTestData, config);
+}
+
+async function signInGitHub(data: Code) {
+  return baseAPI.post<{ token: string }>("/authenticate", data);
 }
 
 export interface Term {
@@ -127,6 +135,7 @@ const api = {
   getCategories,
   getDisciplines,
   getTeachersByDiscipline,
+  signInGitHub,
 };
 
 export default api;

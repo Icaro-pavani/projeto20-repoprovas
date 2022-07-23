@@ -1,17 +1,10 @@
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Button,
   Divider,
-  Link,
   TextField,
   Typography,
   MenuItem,
-  InputLabel,
-  Select,
 } from "@mui/material";
 import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
@@ -19,14 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAlert from "../hooks/useAlert";
 import Form from "../components/Form";
-import api, {
-  Category,
-  Discipline,
-  Teacher,
-  TeacherDisciplines,
-  Test,
-  TestByDiscipline,
-} from "../services/api";
+import api, { Category, Discipline, Teacher } from "../services/api";
 
 const styles = {
   container: {

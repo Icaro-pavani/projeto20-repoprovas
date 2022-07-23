@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import Form from "../components/Form";
@@ -53,6 +53,32 @@ function SignIn() {
     email: "",
     password: "",
   });
+  const [reload, setReload] = useState({ reload: "yes" });
+
+  useEffect(() => {
+    const url = window.location.href;
+    const hasCode = url.includes("?code=");
+
+    async function loginGit(data: { code: string }) {
+      const {
+        data: { token },
+      } = await api.signInGitHub(data);
+      signIn(token);
+      navigate("/app/disciplinas");
+    }
+
+    if (hasCode) {
+      const newUrl = url.split("?code=");
+      window.history.pushState({}, "", newUrl[0]);
+      setReload({ ...reload });
+
+      const sendData = {
+        code: newUrl[1],
+      };
+
+      loginGit(sendData);
+    }
+  }, [reload, navigate, signIn]);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -73,7 +99,6 @@ function SignIn() {
       const {
         data: { token },
       } = await api.signIn({ email, password });
-      console.log(token);
       signIn(token);
       navigate("/app/disciplinas");
     } catch (error: Error | AxiosError | any) {

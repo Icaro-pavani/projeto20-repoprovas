@@ -5,7 +5,9 @@ export interface CreateUserData extends Omit<User, "id"> {
   passwordConfirmation: string;
 }
 
-export async function createUser(userData: CreateUserData) {
+type UserData = Omit<User, "id">;
+
+export async function createUser(userData: UserData) {
   return prisma.user.create({ data: userData });
 }
 

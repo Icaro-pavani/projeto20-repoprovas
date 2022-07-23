@@ -56,6 +56,9 @@ function SignUp() {
   });
   const { token } = useAuth();
 
+  const client_id = process.env.REACT_APP_CLIENT_ID;
+  const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
+
   useEffect(() => {
     if (!!token) {
       navigate("/app/disciplinas");
@@ -112,7 +115,11 @@ function SignUp() {
         <Typography sx={styles.title} variant="h4" component="h1">
           Cadastro
         </Typography>
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          href={`https://github.com/login/oauth/authorize?scope=user&client_id=${client_id}&redirect_uri=${redirect_uri}`}
+        >
           Entrar com Github
         </Button>
         <Box sx={styles.dividerContainer}>
