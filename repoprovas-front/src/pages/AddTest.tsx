@@ -181,13 +181,10 @@ function AddTest() {
             Adicionar
           </Button>
         </Box>
-        <Typography
-          fontWeight="bold"
-          sx={{ marginTop: "50px", fontSize: "24px" }}
-        >
-          Adicone uma prova
-        </Typography>
         <Form onSubmit={handleSubmit}>
+          <Typography fontWeight="bold" sx={{ fontSize: "24px" }}>
+            Adicione uma prova
+          </Typography>
           <Box sx={styles.container}>
             <TextField
               name="name"
